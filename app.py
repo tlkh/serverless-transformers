@@ -5,8 +5,8 @@ import streamlit as st
 import requests
 from newspaper import Article
 
-DEFAULT_QUESTION = "What is COVID-19?"
-DEFAULT_URL = "https://en.wikipedia.org/wiki/COVID-19_pandemic"
+DEFAULT_QUESTION = "When was Nvidia founded?"
+DEFAULT_URL = "https://en.wikipedia.org/wiki/Nvidia"
 DEFAULT_ENDPOINT = "https://cloudrun-transformer-test-34x4ouuclq-de.a.run.app/predict"
 
 st.sidebar.markdown("# Transformer on Cloud Run")
@@ -32,7 +32,7 @@ def make_api_query(context, question, endpoint):
     return response
 
 def main():
-    st.sidebar.markdown("## Question Answering Demo")
+    st.markdown("## Question Answering Demo")
     article_text = download_article(article_url)
     article_text = " ".join(article_text.split(" ")[:max_words])
     context = article_text

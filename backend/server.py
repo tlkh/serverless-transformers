@@ -14,7 +14,7 @@ app = flask.Flask(__name__)
 app.config['TESTING'] = True
 cors = CORS(app)
 
-MODEL_NAME = "allenai/unifiedqa-t5-small"
+MODEL_NAME = "allenai/unifiedqa-t5-base"
 tokenizer = transformers.AutoTokenizer.from_pretrained(MODEL_NAME)
 model = transformers.T5ForConditionalGeneration.from_pretrained(MODEL_NAME)
 
