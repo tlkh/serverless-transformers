@@ -1,0 +1,4 @@
+transformers
+flask
+gunicorn
+flask-cors

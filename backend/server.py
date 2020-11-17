@@ -1,7 +1,13 @@
+print("Starting server script")
+
+import os
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
 import flask
 from flask_cors import CORS
+import torch
 import transformers
-import functools
 import traceback
 
 app = flask.Flask(__name__)
@@ -14,7 +20,7 @@ model = transformers.T5ForConditionalGeneration.from_pretrained(MODEL_NAME)
 
 def run_model(question, context, **generator_args):
     input_string = question.strip() + " \\n " + context.strip()
-    input_ids = tokenizer.encode(input_string, return_tensors="pt").cuda()
+    input_ids = tokenizer.encode(input_string, return_tensors="pt")
     res = model.generate(input_ids, **generator_args)
     return [tokenizer.decode(x) for x in res]
 
@@ -29,11 +35,12 @@ def predict():
         data["success"] = True
         data["answer"] = answer
     except Exception as e:
-        error_string = e + " - " + str(traceback.format_exc())
+        error_string = str(e) + " - " + str(traceback.format_exc())
         print("Error:", error_string)
         data["error"] = error_string
     return flask.jsonify(data)
 
+
 if __name__ == "__main__":
     print("Starting Flask server")
-    app.run(host="0.0.0.0", port=5000, )
+    app.run(host="0.0.0.0", port=5000)
