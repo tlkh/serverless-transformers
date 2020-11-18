@@ -1,6 +1,11 @@
-# cloudrun-transformers
+# Work in Progress
 
-Serve HuggingFace Transformer models via Cloud Run
+# Serverless Transformer
+
+Serve HuggingFace Transformer models via serverless (mostly free):
+
+* Cloud Run (with generous free quota)
+* Free web interface via Streamlit Share
 
 ## Deployment
 
