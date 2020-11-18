@@ -1,5 +1,7 @@
 # Work in Progress
 
+Live link: https://share.streamlit.io/tlkh/serverless-transformers/main/app.py
+
 # Serverless Transformer
 
 Serve HuggingFace Transformer models via serverless (mostly free):
