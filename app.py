@@ -1,4 +1,4 @@
-import functools
+import re
 import streamlit as st
 #st.set_page_config(page_title="Transformer on Cloud Run",
 #                   initial_sidebar_state="expanded")
@@ -21,8 +21,9 @@ def download_article(article_url):
     article = Article(article_url, fetch_images=False)
     article.download()
     article.parse()
-    article_text = article.text
-    return article_text.strip()
+    article_text = article.text.strip()
+    article_text = article_text.replace("[ edit ]", ": \n")
+    return article_text
 
 @st.cache
 def make_api_query(context, question, endpoint):
@@ -39,7 +40,7 @@ def main():
     article_text = download_article(article_url)
     article_text = " ".join(article_text.split(" ")[:max_words])
     context = article_text
-    sentences = context.lower().split(".")
+    sentences = context.split(".")
     with st.beta_expander(label="Show Text Document", expanded=False):
         st.markdown(article_text)
     question = st.text_input("Question", DEFAULT_QUESTION)
@@ -49,12 +50,23 @@ def main():
     try:
         answer = response["answer"][0]
         st.markdown("### "+answer)
-        st.markdown("Evidence:")
-        answer = answer.lower()
-        for s in sentences:
-            if answer in s:
-                st.markdown("* "+s.replace("\n", "").strip())
-    except:
+        answer = answer.lower().strip()
+        evidences = []
+        if answer not in ["yes", "no"]:
+            for s in sentences:
+                if answer in s.lower():
+                    evidences.append("* "+s.replace("\n", "").strip())
+        else:
+            pass
+        if len(evidences) > 0:
+            st.markdown("Evidence:")
+            for e in evidences:
+                st.markdown(e)
+        else:
+            pass
+            #st.markdown("Evidence: **None**")
+    except Exception as e:
+        st.markdown(str(e))
         st.markdown(response)
 
 main()
